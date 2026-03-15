@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rachel's English | 老友记英语学习</title>
+  <link rel="stylesheet" href="App.css">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    const allSceneTags = [
+      '公寓生活', '咖啡馆', '初识', '家庭', '医院', '聊天',
+      '职场', '日常', '约会', '闺蜜', '洗衣房', '表演', '友情'
+    ];
+
+    const sampleEpisodes = [
+      {
+        id: 's01e01',
+        title: 'S01E01 瑞秋逃婚登场',
+        difficulty: '入门',
+        sceneTags: ['初识', '公寓生活'],
+        character: 'rachel',
+        learned: false,
+        favorite: false,
+        duration: '22:30',
+        cover: 'https://picsum.photos/seed/friends1/300/200',
+        videoUrl: '#',
+        subtitles: [
+          { id: 1, en: "Hi, I'm Rachel!", cn: "嗨，我是瑞秋！", time: [0, 5] },
+          { id: 2, en: "Welcome to New York!", cn: "欢迎来到纽约！", time: [6, 10] },
+          { id: 3, en: "I left my fiancé at the altar.", cn: "我在祭坛前抛弃了我的未婚夫。", time: [12, 18] }
+        ]
+      },
+      {
+        id: 's01e02',
+        title: 'S01E02  Monica的约会',
+        difficulty: '进阶',
+        sceneTags: ['约会', '公寓生活'],
+        character: 'monica',
+        learned: false,
+        favorite: false,
+        duration: '21:45',
+        cover: 'https://picsum.photos/seed/friends2/300/200',
+        videoUrl: '#',
+        subtitles: [
+          { id: 1, en: "He's just a guy I work with.", cn: "他只是我一起工作的同事。", time: [3, 8] },
+          { id: 2, en: "You like him, don't you?", cn: "你喜欢他，对不对？", time: [9, 13] }
+        ]
+      },
+      {
+        id: 's01e03',
+        title: 'S01E03 咖啡馆的闲聊',
+        difficulty: '地道俚语',
+        sceneTags: ['咖啡馆', '聊天'],
+        character: 'chandler',
+        learned: false,
+        favorite: false,
+        duration: '23:10',
+        cover: 'https://picsum.photos/seed/friends3/300/200',
+        videoUrl: '#',
+        subtitles: [
+          { id: 1, en: "Could I be more happy?", cn: "我还能更开心吗？（反讽）", time: [5, 10] },
+          { id: 2, en: "That's what she said.", cn: "她也是这么说的。（钱德勒经典梗）", time: [11, 15] }
+        ]
+      }
+    ];
+
+    function App() {
+      const [episodes, setEpisodes] = useState(sampleEpisodes);
+      const [selectedTag, setSelectedTag] = useState('');
+      const [searchText, setSearchText] = useState('');
+
+      const filteredEpisodes = episodes.filter(ep => {
+        const matchTag = !selectedTag || ep.sceneTags.includes(selectedTag);
+        const matchSearch = !searchText || ep.title.includes(searchText) || ep.sceneTags.some(tag => tag.includes(searchText));
+        return matchTag && matchSearch;
+      });
+
+      return (
+        <div className="app">
+          <header className="header">
+            <h1>📺 Rachel's English</h1>
+            <p>跟着《老友记》学地道英语 | 分难度·带字幕·多场景</p>
+          </header>
+
+          <div className="search-box">
+            <input
+              type="text"
+              placeholder="搜索剧集标题/场景..."
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+            />
+          </div>
+
+          <div className="filter-bar">
+            <button
+              className={`tag-btn ${!selectedTag ? 'active' : ''}`}
+              onClick={() => setSelectedTag('')}
+            >
+              全部剧集
+            </button>
+            {allSceneTags.map(tag => (
+              <button
+                key={tag}
+                className={`tag-btn ${selectedTag === tag ? 'active' : ''}`}
+                onClick={() => setSelectedTag(tag)}
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+
+          <div className="episode-grid">
+            {filteredEpisodes.length > 0 ? (
+              filteredEpisodes.map(ep => (
+                <div key={ep.id} className="episode-card">
+                  <img src={ep.cover} alt={ep.title} className="cover" />
+                  <div className="card-info">
+                    <h3 className="card-title">{ep.title}</h3>
+                    <div className="card-meta">
+                      <span className={`difficulty ${ep.difficulty.toLowerCase()}`}>{ep.difficulty}</span>
+                      <span className="duration">{ep.duration}</span>
+                    </div>
+                    <div className="card-tags">
+                      {ep.sceneTags.map(t => (
+                        <span key={t} className="tag">{t}</span>
+                      ))}
+                    </div>
+                    <button className="watch-btn">开始学习</button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="empty-tip">
+                没有找到匹配的剧集哦～ 换个标签试试吧！
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
