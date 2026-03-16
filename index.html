@@ -31,7 +31,7 @@
         favorite: false,
         duration: '22:00',
         cover: '/media/covers/s01e01.jpg',
-        videoUrl: '/media/videos/s01e01.mp4',
+        videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
         subtitles: [
           {
             id: 1,
@@ -63,7 +63,7 @@
         favorite: false,
         duration: '22:00',
         cover: '/media/covers/s01e02.jpg',
-        videoUrl: '/media/videos/s01e02.mp4',
+        videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
         subtitles: [
           { id: 1, en: "We're having a baby.", cn: '我们要有宝宝了。', time: [600, 610], isHighlight: true }
         ],
@@ -89,6 +89,8 @@
 
       const [subMode, setSubMode] = useState(() => localStorage.getItem('subMode') || 'all');
       const [showAnswers, setShowAnswers] = useState(false);
+
+      const [userInputs, setUserInputs] = useState({});
 
       const [recordingSubId, setRecordingSubId] = useState(null);
       const [recordMap, setRecordMap] = useState({});
@@ -218,17 +220,11 @@
         }
       };
 
-      const getBlankLine = (en) => {
-        const words = en.split(' ');
-        if (words.length < 3) return en;
-        const blanked = [...words];
-        const pos = Math.floor(words.length * 0.4);
-        blanked[pos] = '______';
-        if (words.length > 6) {
-          const pos2 = Math.floor(words.length * 0.7);
-          blanked[pos2] = '______';
-        }
-        return blanked.join(' ');
+      const handleInputChange = (subId, index, value) => {
+        setUserInputs(prev => ({
+          ...prev,
+          [`${subId}-${index}`]: value
+        }));
       };
 
       const learnedNum = filteredEpisodes.filter(e => e.learned).length;
@@ -491,26 +487,36 @@
                                     blankPos.push(Math.floor(words.length * 0.7));
                                   }
                                 }
+
                                 return (
                                   <div key={sub.id} className="blank-item">
-                                    <div className="blank-en" style={{ display: "flex", alignItems: "center", gap: "4px", flexWrap: "wrap" }}>
+                                    <div className="blank-en" style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
                                       {words.map((word, i) => {
                                         if (blankPos.includes(i)) {
+                                          const key = `${sub.id}-${i}`;
+                                          const userVal = userInputs[key] || '';
+                                          const isCorrect = userVal.trim().toLowerCase() === word.trim().toLowerCase();
+
                                           if (showAnswers) {
                                             return (
-                                              <input
-                                                key={i}
-                                                className="blank-input answer-correct"
-                                                value={word}
-                                                disabled
-                                              />
+                                              <span key={key} style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+                                                <input
+                                                  value={userVal}
+                                                  disabled
+                                                  className={`blank-input ${isCorrect ? 'user-correct' : 'user-wrong'}`}
+                                                />
+                                                <span className="correct-answer-hint">{word}</span>
+                                              </span>
                                             );
                                           }
+
                                           return (
                                             <input
-                                              key={i}
+                                              key={key}
                                               className="blank-input"
                                               placeholder=" "
+                                              value={userVal}
+                                              onChange={(e) => handleInputChange(sub.id, i, e.target.value)}
                                             />
                                           );
                                         }
