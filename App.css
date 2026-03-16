@@ -543,7 +543,7 @@
   border-left: 3px solid #ffb24b;
 }
 
-/* ✅ 跟读模式高亮样式（我加在这里） */
+/* 跟读模式高亮样式 */
 .sub-item.shadowing {
   background: #fff3e0;
   border-left: 4px solid #ff9800;
@@ -667,64 +667,7 @@
     min-width: 100%;
   }
 }
-/* 跟读按钮 */
-.shadow-btn {
-  margin-top: 6px;
-  padding: 4px 8px;
-  font-size: 12px;
-  border-radius: 6px;
-  background: #ffb24b;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-}
-.shadow-btn:hover {
-  background: #ff9800;
-}
 
-/* 练习页 */
-.practice-box {
-  padding: 6px;
-}
-.practice-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-}
-.answer-btn {
-  padding: 6px 10px;
-  border-radius: 8px;
-  background: #ffb24b;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-}
-.blank-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.blank-item {
-  padding: 10px;
-  background: #fafafa;
-  border-radius: 8px;
-}
-.app.dark .blank-item {
-  background: #252525;
-}
-.blank-en {
-  font-weight: 500;
-  color: #ff5722;
-  margin-bottom: 4px;
-}
-.blank-cn {
-  font-size: 14px;
-  color: #666;
-}
-.app.dark .blank-cn {
-  color: #ccc;
-}
 /* 跟读录音按钮样式 */
 .read-row {
   display: flex;
@@ -792,4 +735,21 @@
 }
 .app.dark .blank-cn {
   color: #ccc;
+}
+
+/* 填空输入框样式（我新加的，用于可输入填空） */
+.blank-input {
+  min-width: 70px;
+  border: none;
+  border-bottom: 2px solid #888;
+  outline: none;
+  font-size: 16px;
+  text-align: center;
+  padding: 2px 4px;
+  background: transparent;
+}
+.answer-correct {
+  border-bottom: 2px solid #2ecc71 !important;
+  color: #2ecc71;
+  font-weight: bold;
 }
